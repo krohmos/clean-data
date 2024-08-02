@@ -26,21 +26,6 @@ class DataAnnotator:
         annotated_data = annotator(data)
     """
 
-    def __call__(self, src: DataFrame) -> DataFrame:
-        """
-        Annotates the source DataFrame with additional details.
-
-        Args:
-            src (DataFrame): The source DataFrame to annotate.
-
-        Returns:
-            DataFrame: The annotated DataFrame.
-        """
-        return src.transform(self.prepare).transform(self.complete)
-
-    def __init__(self, event: str = "n/a") -> None:
-        self.event = event
-
     def __new__(cls, src: DataFrame, event: str = "n/a") -> DataFrame:
         """
         Annotates the source DataFrame with additional details.
@@ -55,6 +40,21 @@ class DataAnnotator:
         obj = super(DataAnnotator, cls).__new__(cls)
         obj.__init__(event)
         return obj(src)
+
+    def __init__(self, event: str = "n/a") -> None:
+        self.event = event
+
+    def __call__(self, src: DataFrame) -> DataFrame:
+        """
+        Annotates the source DataFrame with additional details.
+
+        Args:
+            src (DataFrame): The source DataFrame to annotate.
+
+        Returns:
+            DataFrame: The annotated DataFrame.
+        """
+        return src.transform(self.prepare).transform(self.complete)
 
     def complete(self, src: DataFrame) -> DataFrame:
         """
@@ -93,8 +93,7 @@ class DataAnnotator:
 
         return rdd.toDF()
 
-    @staticmethod
-    def _format(s: str) -> str:
+    def _format(self, s: str) -> str:
         """
         Formats a string by replacing non-alphanumeric characters with underscores.
 
