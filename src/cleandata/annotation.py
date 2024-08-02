@@ -26,9 +26,6 @@ class DataAnnotator:
         annotated_data = annotator(data)
     """
 
-    def __init__(self, event: str = "n/a") -> None:
-        self.event = event
-
     def __call__(self, src: DataFrame) -> DataFrame:
         """
         Annotates the source DataFrame with additional details.
@@ -40,6 +37,24 @@ class DataAnnotator:
             DataFrame: The annotated DataFrame.
         """
         return src.transform(self.prepare).transform(self.complete)
+
+    def __init__(self, event: str = "n/a") -> None:
+        self.event = event
+
+    def __new__(cls, src: DataFrame, event: str = "n/a") -> DataFrame:
+        """
+        Annotates the source DataFrame with additional details.
+
+        Args:
+            src (DataFrame): The source DataFrame to annotate.
+            event (str, optional): The event associated with the data. Defaults to "n/a".
+
+        Returns:
+            DataFrame: The annotated DataFrame.
+        """
+        obj = super(DataAnnotator, cls).__new__(cls)
+        obj.__init__(event)
+        return obj(src)
 
     def complete(self, src: DataFrame) -> DataFrame:
         """

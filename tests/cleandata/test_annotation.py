@@ -14,8 +14,7 @@ def test_annotation_basic(spark: SparkSession):
         schema="A string, B int, C double",
     )
 
-    annotator = DataAnnotator("test")
-    annotated_df = annotator(df)
+    annotated_df = DataAnnotator(df, "test")
 
     # Deconvert.
     deannotated_df = annotated_df.withColumn("x", from_json("raw", df.schema)).select(
@@ -33,8 +32,7 @@ def test_annotation_nested(spark: SparkSession):
         schema="A string, B int, C struct<D string, E int, F struct<G string, H int>>",
     )
 
-    annotator = DataAnnotator("test")
-    annotated_df = annotator(df)
+    annotated_df = DataAnnotator(df, "test")
 
     # Deconvert.
     deannotated_df = annotated_df.withColumn("x", from_json("raw", df.schema)).select(
@@ -52,8 +50,7 @@ def test_annotation_binary(spark: SparkSession):
         schema="id int, value string, b binary",
     )
 
-    annotator = DataAnnotator("test")
-    annotated_df = annotator(df)
+    annotated_df = DataAnnotator(df, "test")
 
     # Deconvert.
     deannotated_df = annotated_df.withColumn("x", from_json("raw", df.schema)).select(
