@@ -67,7 +67,7 @@ class DataAnnotator:
             DataFrame: The completed DataFrame with added details.
         """
         return src.withColumn(
-            "details",
+            "__meta__",
             F.struct(
                 F.expr("uuid()").alias("uuid"),
                 F.when(F.input_file_name() != "", F.input_file_name())
